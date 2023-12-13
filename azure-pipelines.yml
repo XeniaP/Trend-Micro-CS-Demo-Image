@@ -49,7 +49,9 @@ stages:
       - task: Bash@3
         inputs:
           targetType: 'inline'
-          script: ./tmas-cli/tmas scan registry:$(imageName):$(tag) --malwareScan --saveSBOM --platform linux/amd64 >> result.json
+          script: |
+            pip install pandas
+            ./tmas-cli/tmas scan registry:$(imageName):$(tag) --malwareScan --saveSBOM --platform linux/amd64 | python ArtifactScannerReport.py $(imageName)
         env:
           TMAS_API_KEY: $(apikey)
 
