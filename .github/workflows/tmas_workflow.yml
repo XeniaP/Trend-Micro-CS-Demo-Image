@@ -35,8 +35,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Trend Cloud One Container Security Scan Action
-        uses: trendmicro/tmas-scan-action@1.0.10
+      - name: TMAS Scan Action
+        uses: trendmicro/tmas-scan-action@1.0.11
         with:
             # Mandatory
             TMAS_API_KEY: ${{ secrets.API_KEY }}
