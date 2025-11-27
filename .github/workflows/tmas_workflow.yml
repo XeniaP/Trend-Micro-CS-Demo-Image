@@ -45,7 +45,7 @@ jobs:
           secretsScan: true
           artifact: dir:./
           additionalArgs: --region=us-east-1
-          tmasApiKey: ${{ secrets.API_KEY }}
+          tmasApiKey: ${{ env.TMAS_API_KEY }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Upload Scan Result Artifact'
         uses: actions/upload-artifact@v4
