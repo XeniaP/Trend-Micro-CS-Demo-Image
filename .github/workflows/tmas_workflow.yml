@@ -42,8 +42,8 @@ jobs:
           vulnerabilitiesScan: true
           malwareScan: false
           secretsScan: true
-          artifact: dir:./repo-name
-          additionalArgs: --region=ue-east-1
+          artifact: dir:./
+          additionalArgs: --region=us-east-1
           tmasApiKey: ${{ secrets.API_KEY }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Upload Scan Result Artifact'
