@@ -45,12 +45,12 @@ jobs:
           secretsScan: true
           artifact: dir:./
           additionalArgs: --region=us-east-1
-          tmasApiKey: "${{ secrets.TMAS_API_KEY }}"
+          tmasApiKey: ${{ env.TMAS_API_KEY }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
         env:
           REGISTRY: ghcr.io
           IMAGE_NAME: ${{ github.repository }}
-          TMAS_API_KEY: ${{ secrets.TMAS_API_KEY }} 
+          TMAS_API_KEY: ${{ env.TMAS_API_KEY }} 
         
       - name: 'Upload Scan Result Artifact'
         uses: actions/upload-artifact@v4
