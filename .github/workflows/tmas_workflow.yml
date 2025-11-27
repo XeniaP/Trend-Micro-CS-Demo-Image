@@ -36,10 +36,14 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Debug Secret Var
-        run: echo "Secret key length:"
-        env:
-          TMAS_API_KEY: ${{ secrets.TMAS_API_KEY }}
+      - name: Check if TMAS_API_KEY is set
+        run: |
+          if [ -z "${{ secrets.TMAS_API_KEY }}" ]; then
+            echo "❌ TMAS_API_KEY is not set"
+            exit 1
+          else
+            echo "✅ TMAS_API_KEY is set (length > 0)"
+          fi
       - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
         uses: trendmicro/tmas-scan-action@v3.0.1
         with:
