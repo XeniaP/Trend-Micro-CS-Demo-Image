@@ -35,25 +35,17 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: TMAS Scan Action
-        uses: trendmicro/tmas-scan-action@1.0.11
+      - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
+        uses: trendmicro/tmas-scan-action@vX
         with:
-            # Mandatory
-            TMAS_API_KEY: ${{ secrets.API_KEY }}
-            REGION: us-1
-            # Optional
-            SBOM: true # Saves SBOM to SBOM.json so you can export it as an artifact later.
-            IMAGE: ${{ steps.meta.outputs.tags }} # The image need to be public or the pipeline need to have access to the private image of choice.
-            LOCAL_IMAGE_TARBALL: image.tar # For each threshold below, select the maximum number of vulnerabilities that are acceptable.
-            MALWARE_SCAN: true
-            MAX_TOTAL: 1000
-            MAX_CRITICAL: 500
-            MAX_HIGH: 500
-            MAX_MEDIUM: 500
-            MAX_LOW: 500
-            MAX_NEGLIGIBLE: 500
-            MAX_UNKNOWN: 500
-            SCAN_RESULT_ARTIFACT: result.json # Save as an artifact in GitHub to be able to keep the result of the scan.
+          version: '3' # Recommended: pin to major version for automatic updates within v2.x.x
+          vulnerabilitiesScan: true
+          malwareScan: false
+          secretsScan: true
+          artifact: dir:./repo-name
+          additionalArgs: --region=ue-east-1
+          tmasApiKey: ${{ secrets.API_KEY }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Upload Scan Result Artifact'
         uses: actions/upload-artifact@v4
         with:
