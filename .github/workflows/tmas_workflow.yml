@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TMAS_API_KEY: ${{  secrets.TMAS_API_KEY }} 
+  TMAS_API_KEY: ${{ secrets.TMAS_API_KEY }} 
 jobs:
   push_to_registries:
     name: Push Docker image to multiple registries
@@ -36,14 +36,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Check if TMAS_API_KEY is set
-        run: |
-          if [ -z "${{ secrets.TMAS_API_KEY }}" ]; then
-            echo "❌ TMAS_API_KEY is not set"
-            exit 1
-          else
-            echo "✅ TMAS_API_KEY is set (length > 0)"
-          fi
       - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
         uses: trendmicro/tmas-scan-action@v3.0.1
         with:
@@ -53,7 +45,7 @@ jobs:
           secretsScan: true
           artifact: dir:./
           additionalArgs: --region=us-east-1
-          tmasApiKey: ${{ secrets.TMAS_API_KEY }}
+          tmasApiKey: ${{ env.TMAS_API_KEY }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
         
       - name: 'Upload Scan Result Artifact'
