@@ -37,7 +37,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Debug Secret Var
-        run: echo "Secret key length: ${#TMAS_API_KEY}"
+        run: echo "Secret key length:"
         env:
           TMAS_API_KEY: ${{ secrets.TMAS_API_KEY }}
       - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
