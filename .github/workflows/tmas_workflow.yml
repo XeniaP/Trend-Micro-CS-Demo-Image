@@ -16,6 +16,16 @@ jobs:
       packages: write
       contents: read
     steps:
+      - name: Check if secret exists
+        run: |
+          if [ -z "${MY_SECRET}" ]; then
+            echo "Secret MY_SECRET NO existe o está vacío"
+            exit 1
+          else
+            echo "Secret MY_SECRET está configurado"
+          fi
+        env:
+          MY_SECRET: ${{ secrets.TMAS_API_KEY }}
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
       - name: 'Login to GitHub Container Registry'
