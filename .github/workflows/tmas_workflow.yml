@@ -46,6 +46,25 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      ## Save Image Tar File
+      - name: Load Docker image locally
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
+          echo "Pulling image locally: ${IMAGE}"
+          docker pull "${IMAGE}"
+          echo "LOCAL_IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+          echo "Images available locally:"
+          docker images
+          echo "Inspecting image:"
+          docker image inspect "${IMAGE}"
+      - name: Save Docker image as TAR
+        shell: bash
+        run: |
+          docker save "${LOCAL_IMAGE}" -o image.tar
+          echo "Docker image saved:"
+          ls -lh image.tar
+      ## Scan directory TMAS
       - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
         uses: trendmicro/tmas-scan-action@v3.0.1
         with:
@@ -61,7 +80,22 @@ jobs:
           REGISTRY: ghcr.io
           IMAGE_NAME: ${{ github.repository }}
           TMAS_API_KEY: ${{ env.TMAS_API_KEY }} 
-        
+      ## Scan TAR Image TMAS
+      - name: Download TMAS and Scan Repo for Open Source Vulnerabilities and Secrets
+        uses: trendmicro/tmas-scan-action@v3.0.1
+        with:
+          version: '2' # Recommended: pin to major version for automatic updates within v2.x.x
+          vulnerabilitiesScan: true
+          malwareScan: false
+          secretsScan: true
+          artifact: docker-archive:./image.tar
+          additionalArgs: --region=us-east-1
+          tmasApiKey: ${{ env.TMAS_API_KEY }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          REGISTRY: ghcr.io
+          IMAGE_NAME: ${{ github.repository }}
+          TMAS_API_KEY: ${{ env.TMAS_API_KEY }} 
       - name: 'Upload Scan Result Artifact'
         uses: actions/upload-artifact@v4
         with:
