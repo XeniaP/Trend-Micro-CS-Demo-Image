@@ -37,21 +37,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       ## Save Image Tar File
-      - name: Load Docker image locally
-        shell: bash
-        run: |
-          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.version }}"
-          echo "Pulling image locally: ${IMAGE}"
-          docker pull "${IMAGE}"
-          echo "LOCAL_IMAGE=${IMAGE}" >> "$GITHUB_ENV"
-          echo "Images available locally:"
-          docker images
-          echo "Inspecting image:"
-          docker image inspect "${IMAGE}"
       - name: Save Docker image as TAR
         shell: bash
         run: |
-          docker save "${LOCAL_IMAGE}" -o image.tar
+          docker save "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}" -o image.tar
           echo "Docker image saved:"
           ls -lh image.tar
       ## Scan directory TMAS
