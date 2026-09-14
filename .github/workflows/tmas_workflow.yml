@@ -40,8 +40,7 @@ jobs:
       - name: Save Docker image as TAR
         shell: bash
         run: |
-          LOWERCASE_STR="${env.IMAGE_NAME,,}"
-          docker save "${{ env.REGISTRY }}/${LOWERCASE_STR}" -o image.tar
+          docker save "${{ steps.meta.outputs.tags }}" -o image.tar
           echo "Docker image saved:"
           ls -lh image.tar
       ## Scan directory TMAS
