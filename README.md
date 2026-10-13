@@ -1,6 +1,4 @@
-# Trend Micro Smart Check Demo Image Example
-
-[![Deep Security Smart Check](https://github.com/XeniaP/Trend-Micro-Smart-Check-Demo-Image/actions/workflows/dssc-workload.yml/badge.svg)](https://github.com/XeniaP/Trend-Micro-Smart-Check-Demo-Image/actions/workflows/dssc-workload.yml)
+# TrendAI Code Security Scan Demo
 
 This is a Docker Image used Only for Demostration - NOT USE IN PRODUCTION ENVIRONMENT
 
